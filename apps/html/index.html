@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,789 +8,267 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="logo-container">
-        <img src="https://cdn.skyreve.cloud/logo/logo-white_512x512.png" alt="Skyreve Logo" class="logo">
-    </div>
 
+<body>
     <div class="main-container">
-        <div class="card">
-            <div class="card-body">
+        <div class="blog-list-container">
+            <div class="blog-list-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="card-title mb-0">Blog List</h5>
                     <div class="api-input">
                         <div class="input-group">
-                            <input type="text" class="form-control" id="backendUrl" placeholder="Enter your API URL">
-                            <button class="btn btn-primary" onclick="fetchBlogs()">
+                            <input type="text" class="form-control" id="backendUrl" placeholder="Enter your API URL"
+                                value="
+                            https://api.skyreve.cloud/project/7kq3madvoajx5z9p:obvgyqx4yx6w45ea/blogs/recent">
+                            <button class="btn btn-primary" onclick="fetchBlogList()">
                                 <i class="fas fa-sync"></i> Refresh
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div id="loadingContainer" class="text-center py-5" style="display: none;">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                <div id="blogList" style="width: 100%; display: flex; justify-content: center;">
+                    <div id="no-blog-list" style="width: 100%; display: flex; justify-content: center;">
+                        <span class="blog-date">No Post Yet!</span>
                     </div>
                 </div>
 
-                <div id="errorContainer" class="alert alert-danger" style="display: none;"></div>
-
-                <div id="blogCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <!-- Carousel Indicators -->
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#blogCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#blogCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#blogCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-
-                    <!-- Carousel Inner -->
-                    <div class="carousel-inner">
-                        <!-- Empty State -->
-                        <div class="carousel-item active">
-                            <div class="row g-4">
-                                <div class="col-md-4">
-                                    <div class="blog-card">
-                                        <div class="blog-image" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4);"></div>
-                                        <div class="blog-content">
-                                            <div class="blog-meta">
-                                                <span class="blog-date">No date</span>
-                                                <span class="blog-category">No category</span>
-                                            </div>
-                                            <h3 class="blog-title">No title</h3>
-                                            <p class="blog-excerpt">No content available</p>
-                                            <div class="blog-footer">
-                                                <div class="blog-stats">
-                                                    <span><i class="far fa-eye"></i> 0</span>
-                                                    <span><i class="far fa-heart"></i> 0</span>
-                                                    <span><i class="far fa-comment"></i> 0</span>
-                                                </div>
-                                                <a href="#" class="read-more">Read More</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="blog-card">
-                                        <div class="blog-image" style="background: linear-gradient(45deg, #A8E6CF, #FFD3B6);"></div>
-                                        <div class="blog-content">
-                                            <div class="blog-meta">
-                                                <span class="blog-date">No date</span>
-                                                <span class="blog-category">No category</span>
-                                            </div>
-                                            <h3 class="blog-title">No title</h3>
-                                            <p class="blog-excerpt">No content available</p>
-                                            <div class="blog-footer">
-                                                <div class="blog-stats">
-                                                    <span><i class="far fa-eye"></i> 0</span>
-                                                    <span><i class="far fa-heart"></i> 0</span>
-                                                    <span><i class="far fa-comment"></i> 0</span>
-                                                </div>
-                                                <a href="#" class="read-more">Read More</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="blog-card">
-                                        <div class="blog-image" style="background: linear-gradient(45deg, #6C5CE7, #A8E6CF);"></div>
-                                        <div class="blog-content">
-                                            <div class="blog-meta">
-                                                <span class="blog-date">No date</span>
-                                                <span class="blog-category">No category</span>
-                                            </div>
-                                            <h3 class="blog-title">No title</h3>
-                                            <p class="blog-excerpt">No content available</p>
-                                            <div class="blog-footer">
-                                                <div class="blog-stats">
-                                                    <span><i class="far fa-eye"></i> 0</span>
-                                                    <span><i class="far fa-heart"></i> 0</span>
-                                                    <span><i class="far fa-comment"></i> 0</span>
-                                                </div>
-                                                <a href="#" class="read-more">Read More</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Carousel Controls -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#blogCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#blogCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-
-                <!-- Skeleton Loading Template -->
-                <div id="skeletonTemplate" style="display: none;">
-                    <div class="carousel-item">
-                        <div class="row g-4">
-                            <div class="col-md-4">
-                                <div class="blog-card">
-                                    <div class="blog-image" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4);"></div>
-                                    <div class="blog-content">
-                                        <div class="skeleton-text" style="width: 80%; height: 24px; margin: auto;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="blog-card">
-                                    <div class="blog-image" style="background: linear-gradient(45deg, #A8E6CF, #FFD3B6);"></div>
-                                    <div class="blog-content">
-                                        <div class="skeleton-text" style="width: 80%; height: 24px; margin: auto;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="blog-card">
-                                    <div class="blog-image" style="background: linear-gradient(45deg, #6C5CE7, #A8E6CF);"></div>
-                                    <div class="blog-content">
-                                        <div class="skeleton-text" style="width: 80%; height: 24px; margin: auto;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="setup-steps mt-4">
                     <h6>Need help setting up your backend?</h6>
-                    <p>Follow the setup instructions in the <a href="../../README.md" target="_blank">README file</a>.</p>
+                    <p>Follow the setup instructions in the <a
+                            href="https://github.com/SkyReve/sample/blob/main/README.md" target="_blank">README
+                            file</a>.</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Array of gradient colors for skeleton loading
-        const gradientColors = [
-            'linear-gradient(45deg, #FF6B6B, #4ECDC4)',
-            'linear-gradient(45deg, #A8E6CF, #FFD3B6)',
-            'linear-gradient(45deg, #FF8B94, #FFD93D)',
-            'linear-gradient(45deg, #6C5CE7, #A8E6CF)',
-            'linear-gradient(45deg, #FFD93D, #FF6B6B)',
-            'linear-gradient(45deg, #4ECDC4, #FF8B94)'
-        ];
+        <script>
+            const gradients = [
+                ['#ff9a9e', '#fad0c4'],
+                ['#a18cd1', '#fbc2eb'],
+                ['#fbc2eb', '#a6c1ee'],
+                ['#fdcbf1', '#e6dee9'],
+                ['#a1c4fd', '#c2e9fb'],
+                ['#667eea', '#764ba2'],
+                ['#89f7fe', '#66a6ff'],
+                ['#fddb92', '#d1fdff'],
+                ['#43e97b', '#38f9d7'],
+            ];
 
-        // Array of placeholder images
-        const placeholderImages = [
-            'https://api.unsplash.com/photos/random?client_id=YOUR_ACCESS_KEY&query=nature',
-            'https://api.unsplash.com/photos/random?client_id=YOUR_ACCESS_KEY&query=technology',
-            'https://api.unsplash.com/photos/random?client_id=YOUR_ACCESS_KEY&query=business',
-            'https://api.unsplash.com/photos/random?client_id=YOUR_ACCESS_KEY&query=lifestyle',
-            'https://api.unsplash.com/photos/random?client_id=YOUR_ACCESS_KEY&query=food',
-            'https://api.unsplash.com/photos/random?client_id=YOUR_ACCESS_KEY&query=travel'
-        ];
+            function getRandomGradient() {
+                const [start, end] = gradients[Math.floor(Math.random() * gradients.length)];
+                return `linear-gradient(135deg, ${start}, ${end})`;
+            }
 
-        // Function to get random item from array
-        function getRandomItem(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
+            function truncateText(text, maxLength = 100) {
+                if (!text) return '';
+                return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+            }
 
-        // Function to update skeleton backgrounds
-        function updateSkeletonBackgrounds() {
-            const blogImages = document.querySelectorAll('.blog-image');
-            blogImages.forEach(image => {
-                image.style.background = getRandomItem(gradientColors);
-            });
-        }
+            async function fetchBlogList() {
+                const url = document.getElementById("backendUrl").value;
+                const listEl = document.getElementById("blogList");
+                listEl.innerHTML = '';
 
-        // Update skeleton backgrounds when page loads
-        document.addEventListener('DOMContentLoaded', updateSkeletonBackgrounds);
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('Fail to response');
+                    const data = await response.json();
 
-        function validateAndFormatUrl(url) {
-            try {
-                // Remove any whitespace
-                url = url.trim();
-                
-                // If URL doesn't start with http:// or https://, add https://
-                if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                    url = 'https://' + url;
+                    const result = data.result;
+
+                    if (!Array.isArray(result)) {
+                        listEl.innerHTML = '<li>Invalid data format</li>';
+                        return;
+                    }
+
+                    result.forEach((item, index) => {
+                        const topBg = getRandomGradient();
+                        const title = item.title || `No Title (${index + 1})`;
+                        const content = truncateText(item.content || '', 20);
+                        const createdAt = item.created_at
+                            ? new Date(item.created_at).toLocaleString(navigator.language)
+                            : 'n/a';
+
+                        const card = document.createElement("div");
+                        card.className = "blog-card";
+                        card.innerHTML = `
+                            <div class="blog-top" style="background: ${topBg}"></div>
+                            <div class="blog-card-title">${title}</div>
+                            <div class="blog-card-content">${content}</div>
+                            <div class="blog-card-date">${createdAt}</div>
+                        `;
+                        listEl.appendChild(card);
+                    });
+                } catch (error) {
+                    listEl.innerHTML = `<li>에러 발생: ${error.message}</li>`;
                 }
-
-                // Parse the URL
-                const urlObj = new URL(url);
-                
-                // If the domain is not skyreve.cloud, replace it
-                if (!urlObj.hostname.endsWith('skyreve.cloud')) {
-                    urlObj.hostname = 'api.skyreve.cloud';
-                    return urlObj.toString();
-                }
-                
-                return url;
-            } catch (e) {
-                // Show error message for invalid URL
-                showError('Invalid URL format. Please enter a valid URL.');
-                return null;
             }
-        }
-
-        async function fetchBlogs() {
-            let backendUrl = document.getElementById('backendUrl').value;
-            if (!backendUrl) {
-                showError('Please enter an API URL');
-                return;
+        </script>
+        <style>
+            :root {
+                --dark-bg: #1a1a1a;
+                --darker-bg: #141414;
+                --card-bg: #242424;
+                --text-primary: #ffffff;
+                --text-secondary: #b3b3b3;
+                --border-color: #333333;
+                --accent-color: #0d6efd;
+                --hover-color: #2a2a2a;
+                --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                --card-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             }
 
-            // Validate and format the URL
-            backendUrl = validateAndFormatUrl(backendUrl);
-            if (!backendUrl) {
-                return; // Stop if URL validation failed
+            body {
+                background-color: var(--dark-bg);
+                color: var(--text-primary);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             }
-            document.getElementById('backendUrl').value = backendUrl;
 
-            // Show loading state
-            document.getElementById('loadingContainer').style.display = 'block';
-            document.getElementById('errorContainer').style.display = 'none';
-
-            // Show skeleton loading
-            const carouselInner = document.querySelector('.carousel-inner');
-            const skeletonTemplate = document.getElementById('skeletonTemplate').innerHTML;
-            carouselInner.innerHTML = skeletonTemplate;
-
-            try {
-                const response = await fetch(backendUrl);
-                const data = await response.json();
-
-                // Hide loading state
-                document.getElementById('loadingContainer').style.display = 'none';
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                // Group blogs into sets of 3 for carousel
-                const blogsPerSlide = 3;
-                const slides = [];
-                for (let i = 0; i < data.length; i += blogsPerSlide) {
-                    slides.push(data.slice(i, i + blogsPerSlide));
-                }
-
-                // Update carousel with actual data
-                carouselInner.innerHTML = slides.map((slideBlogs, index) => `
-                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                        <div class="row g-4">
-                            ${slideBlogs.map(blog => `
-                                <div class="col-md-4">
-                                    <div class="blog-card">
-                                        <div class="blog-image" style="background: ${getRandomItem(gradientColors)}">
-                                            <img src="${blog.image_url || getRandomItem(placeholderImages)}" 
-                                                 alt="${blog.title}" 
-                                                 class="img-fluid">
-                                        </div>
-                                        <div class="blog-content">
-                                            <div class="blog-meta">
-                                                <span class="blog-date">${new Date(blog.posted_at).toLocaleDateString()}</span>
-                                                <span class="blog-category">${blog.category || 'Uncategorized'}</span>
-                                            </div>
-                                            <h3 class="blog-title">${blog.title}</h3>
-                                            <p class="blog-excerpt">${blog.content.substring(0, 150)}${blog.content.length > 150 ? '...' : ''}</p>
-                                            <div class="blog-footer">
-                                                <div class="blog-stats">
-                                                    <span><i class="far fa-eye"></i> ${blog.views || 0}</span>
-                                                    <span><i class="far fa-heart"></i> ${blog.likes || 0}</span>
-                                                    <span><i class="far fa-comment"></i> ${blog.comments || 0}</span>
-                                                </div>
-                                                <a href="#" class="read-more">Read More</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('');
-
-                // Update carousel indicators
-                const indicators = document.querySelector('.carousel-indicators');
-                indicators.innerHTML = slides.map((_, index) => `
-                    <button type="button" 
-                            data-bs-target="#blogCarousel" 
-                            data-bs-slide-to="${index}" 
-                            ${index === 0 ? 'class="active" aria-current="true"' : ''} 
-                            aria-label="Slide ${index + 1}">
-                    </button>
-                `).join('');
-
-            } catch (error) {
-                showError('Error fetching data: ' + error.message);
-                document.getElementById('loadingContainer').style.display = 'none';
-                // Restore empty state
-                carouselInner.innerHTML = document.querySelector('.carousel-item').outerHTML;
+            .main-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem;
             }
-        }
 
-        function showError(message) {
-            const errorContainer = document.getElementById('errorContainer');
-            errorContainer.textContent = message;
-            errorContainer.style.display = 'block';
-        }
-    </script>
-    <style>
-        :root {
-            --dark-bg: #1a1a1a;
-            --darker-bg: #141414;
-            --card-bg: #242424;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --border-color: #333333;
-            --accent-color: #0d6efd;
-            --hover-color: #2a2a2a;
-            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            --card-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-    
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-    
-        .logo-container {
-            text-align: center;
-            margin: 2rem 0;
-        }
-    
-        .logo {
-            max-width: 200px;
-            height: auto;
-        }
-    
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-    
-        .card {
-            background-color: var(--card-bg);
-            border: none;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-        }
-    
-        .card-body {
-            color: var(--text-primary);
-            padding: 2rem;
-        }
-    
-        .api-input {
-            flex: 1;
-            max-width: 600px;
-            margin-left: 20px;
-        }
-    
-        .api-input .input-group {
-            width: 100%;
-        }
-    
-        .api-input .form-control {
-            flex: 1;
-            min-width: 400px;
-        }
-    
-        .form-control {
-            background-color: var(--darker-bg);
-            border-color: var(--border-color);
-            color: var(--text-primary);
-            border-radius: 8px;
-        }
-    
-        .form-control:focus {
-            background-color: var(--darker-bg);
-            border-color: var(--accent-color);
-            color: var(--text-primary);
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        }
-    
-        .form-control::placeholder {
-            color: var(--text-secondary);
-        }
-    
-        .btn-primary {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            border-radius: 8px;
-            padding: 0.5rem 1.5rem;
-        }
-    
-        .btn-primary:hover {
-            background-color: #0b5ed7;
-            border-color: #0a58ca;
-        }
-    
-        .blog-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-    
-        .blog-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--card-hover-shadow);
-        }
-    
-        .blog-image {
-            position: relative;
-            padding-top: 56.25%;
-            /* 16:9 aspect ratio */
-            overflow: hidden;
-        }
-    
-        .blog-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-    
-        .blog-card:hover .blog-image img {
-            transform: scale(1.05);
-        }
-    
-        .blog-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-    
-        .blog-meta {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-    
-        .blog-date,
-        .blog-category {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-    
-        .blog-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-            color: var(--text-primary);
-        }
-    
-        .blog-excerpt {
-            font-size: 0.9375rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-    
-        .blog-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-    
-        .blog-stats {
-            display: flex;
-            gap: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-    
-        .blog-stats span {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-    
-        .read-more {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-        }
-    
-        .read-more:hover {
-            color: #0b5ed7;
-        }
-    
-        #loadingContainer {
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    
-        .spinner-border {
-            width: 3rem;
-            height: 3rem;
-        }
-    
-        .alert {
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-    
-        .setup-steps {
-            background-color: var(--darker-bg);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-    
-        .setup-steps h6 {
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-    
-        .setup-steps p {
-            color: var(--text-secondary);
-            margin-bottom: 0;
-        }
-    
-        .setup-steps a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-    
-        .setup-steps a:hover {
-            text-decoration: underline;
-        }
-    
-        .nav-tabs {
-            border-bottom-color: var(--border-color);
-        }
-    
-        .nav-tabs .nav-link {
-            color: var(--text-secondary);
-            border-color: var(--border-color);
-        }
-    
-        .nav-tabs .nav-link:hover {
-            color: var(--text-primary);
-            border-color: var(--hover-color);
-            background-color: var(--hover-color);
-        }
-    
-        .nav-tabs .nav-link.active {
-            color: var(--accent-color);
-            background-color: var(--card-bg);
-            border-color: var(--border-color) var(--border-color) var(--card-bg);
-            font-weight: bold;
-        }
-    
-        .response-container {
-            background-color: var(--darker-bg);
-            padding: 1rem;
-            border-radius: 5px;
-            margin-top: 1rem;
-            border: 1px solid var(--border-color);
-        }
-    
-        pre {
-            background-color: var(--darker-bg);
-            padding: 1rem;
-            border-radius: 5px;
-            overflow-x: auto;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-    
-        .card-title {
-            color: var(--text-primary);
-        }
-    
-        .card-text {
-            color: var(--text-secondary);
-        }
-    
-        .text-muted {
-            color: var(--text-secondary) !important;
-        }
-    
-        .form-label {
-            color: var(--text-primary);
-        }
-    
-        .accordion-item {
-            background-color: var(--card-bg);
-            border-color: var(--border-color);
-        }
-    
-        .accordion-button {
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-        }
-    
-        .accordion-button:not(.collapsed) {
-            background-color: var(--hover-color);
-            color: var(--accent-color);
-        }
-    
-        .accordion-button:focus {
-            box-shadow: none;
-            border-color: var(--border-color);
-        }
-    
-        .accordion-body {
-            background-color: var(--darker-bg);
-            color: var(--text-secondary);
-        }
-    
-        .accordion-button::after {
-            filter: invert(1);
-        }
-    
-        .img-fluid {
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-    
-        /* Skeleton Loading Styles */
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
+            .blog-list-container {
+                background-color: var(--card-bg);
+                border: none;
+                border-radius: 12px;
+                box-shadow: var(--card-shadow);
             }
-    
-            100% {
-                background-position: 1000px 0;
+
+            .blog-list-body {
+                color: var(--text-primary);
+                padding: 2rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: calc(100vh - 4rem);
             }
-        }
-    
-        .skeleton-text {
-            position: relative;
-            overflow: hidden;
-            background-color: var(--darker-bg);
-            border-radius: 4px;
-        }
-    
-        .skeleton-text::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg,
-                    transparent,
-                    rgba(255, 255, 255, 0.05),
-                    transparent);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-    
-        /* Remove unused skeleton styles */
-        .skeleton,
-        .skeleton-image,
-        .blog-card.skeleton,
-        .blog-card.skeleton .blog-image,
-        .blog-card.skeleton .blog-content,
-        .blog-card.skeleton .blog-footer {
-            all: unset;
-        }
-    
-        /* Carousel Styles */
-        .carousel {
-            margin: 2rem 0;
-            padding: 0 1rem;
-        }
-    
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 1;
-            margin: 0 20px;
-        }
-    
-        .carousel-control-prev {
-            left: 0;
-        }
-    
-        .carousel-control-next {
-            right: 0;
-        }
-    
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-    
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            width: 20px;
-            height: 20px;
-            background-size: 100% 100%;
-        }
-    
-        .carousel-indicators {
-            bottom: -40px;
-        }
-    
-        .carousel-indicators button {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin: 0 5px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border: none;
-        }
-    
-        .carousel-indicators button.active {
-            background-color: #fff;
-        }
-    
-        .carousel-item {
-            padding: 1rem 0;
-        }
-    
-        /* Adjust blog card styles for carousel */
-        .blog-card {
-            height: 100%;
-            margin-bottom: 1rem;
-        }
-    
-        .blog-image {
-            height: 200px;
-        }
-    
-        .blog-content {
-            height: calc(100% - 200px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-    
-        .blog-excerpt {
-            flex-grow: 1;
-        }
-    </style>
-    </body>
-    
-    </html>
+
+            .api-input {
+                flex: 1;
+                max-width: 600px;
+                margin-left: 20px;
+            }
+
+            .api-input .input-group {
+                width: 100%;
+            }
+
+            .api-input .form-control {
+                flex: 1;
+                min-width: 400px;
+            }
+
+            .form-control {
+                background-color: var(--darker-bg);
+                border-color: var(--border-color);
+                color: var(--text-primary);
+                border-radius: 8px;
+            }
+
+            .form-control:focus {
+                background-color: var(--darker-bg);
+                border-color: var(--accent-color);
+                color: var(--text-primary);
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            }
+
+            .form-control::placeholder {
+                color: var(--text-secondary);
+            }
+
+            .btn-primary {
+                background-color: var(--accent-color);
+                border-color: var(--accent-color);
+                border-radius: 8px;
+                padding: 0.5rem 1.5rem;
+            }
+
+            .btn-primary:hover {
+                background-color: #0b5ed7;
+                border-color: #0a58ca;
+            }
+
+            .blog-card {
+                overflow: hidden;
+                border-radius: 12px;
+                transition: transform 0.2s, box-shadow 0.2s;
+                display: flex;
+                flex-direction: column;
+                align-items: left;
+                justify-content: center;
+                cursor: pointer;
+                margin: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+
+            .blog-card:hover {
+                transform: translateY(-4px);
+                box-shadow: var(--card-hover-shadow);
+            }
+
+            .blog-top {
+                width: 320px;
+                height: 200px;
+                border-radius: 12px;
+                margin-bottom: 1.5rem;
+            }
+
+            .blog-card-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .blog-card-content {
+                font-size: 0.95rem;
+                line-height: 1.4;
+                margin-bottom: 12px;
+            }
+
+            .blog-card-date {
+                font-size: 0.85rem;
+                opacity: 0.8;
+            }
+
+            .setup-steps {
+                background-color: var(--darker-bg);
+                padding: 1rem;
+                border-radius: 8px;
+                margin-bottom: 2rem;
+            }
+
+            .setup-steps h6 {
+                color: var(--text-primary);
+                margin-bottom: 0.5rem;
+            }
+
+            .setup-steps p {
+                color: var(--text-secondary);
+                margin-bottom: 0;
+            }
+
+            .setup-steps a {
+                color: var(--accent-color);
+                text-decoration: none;
+            }
+
+            .setup-steps a:hover {
+                text-decoration: underline;
+            }
+
+            .text-muted {
+                color: var(--text-secondary) !important;
+            }
+
+            .form-label {
+                color: var(--text-primary);
+            }
+        </style>
+</body>
+
+</html>
