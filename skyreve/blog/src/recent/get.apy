@@ -1,0 +1,22 @@
+try:
+    # Retrieve an table object to process database operations.
+    blog_table = reve.database["Blog"]
+
+    # Lists recent blogs in descending order of creation date time.
+    blog_list = blog_table.select().all().order_by("-created_at")
+
+    result = []
+    for idx, blog in enumerate(blog_list):
+        if idx > 10:
+            break
+            
+        result.append({
+            "title": blog.title,
+            "content": blog.contents,
+            "created_at": str(blog.created_at),
+        })
+
+    logger.info(result)
+    return Response(200, { "result": result })
+except Exception as e:
+    raise exceptions.Http400({"error_msg": f"Fail to list up recent blogs: {e}"})
